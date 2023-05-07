@@ -1,30 +1,36 @@
 import { useState } from 'react';
 import Square from './Square';
 const Board = () => {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+ const [isXNext,setXNext]=useState(false);
+  const handleSquareClick = clickedPosition => {
 
-const [squares ,setSquares] = useState(Array(9).fill(null))
-console.log(squares);
-const handleSquareClick = (clickedPosition)=>{
-
-setSquares((currentSquare)=>{
-return currentSquare.map((squareValue,position)=>{
-  if(clickedPosition === position){
-    // console.log(squareValue);
-    return 'X'
-
-  }
-  return squareValue
-})
-})
-
-
+if(squares[clickedPosition]){
+  return;
 }
 
-const renderSquare = (position)=>{
-    return(
-        <Square value={squares[position]} onClick={()=>handleSquareClick(position)} />
-    )
-}
+
+
+
+    setSquares(currentSquare => {
+      return currentSquare.map((squareValue, position) => {
+        if (clickedPosition === position) {
+          return isXNext?'X':'O';
+        }
+        return squareValue;
+      });
+    });
+    setXNext((currentIsXNext)=>!currentIsXNext)
+  };
+
+  const renderSquare = position => {
+    return (
+      <Square
+        value={squares[position]}
+        onClick={() => handleSquareClick(position)}
+      />
+    );
+  };
 
   return (
     <div className="board">
@@ -32,16 +38,14 @@ const renderSquare = (position)=>{
         {renderSquare(0)}
         {renderSquare(1)}
         {renderSquare(2)}
-
-        
       </div>
       <div className="board-row">
-      {renderSquare(3)}
+        {renderSquare(3)}
         {renderSquare(4)}
         {renderSquare(5)}
       </div>
       <div className="board-row">
-      {renderSquare(6)}
+        {renderSquare(6)}
         {renderSquare(7)}
         {renderSquare(8)}
       </div>
